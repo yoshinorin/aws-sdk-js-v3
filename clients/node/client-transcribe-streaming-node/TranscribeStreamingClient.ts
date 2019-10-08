@@ -1,32 +1,18 @@
 import { contentLengthPlugin } from "@aws-sdk/middleware-content-length";
 import {
-<<<<<<< HEAD
-  userAgentPlugin,
-=======
   UserAgentPlugin,
->>>>>>> feat: add client and config
   UserAgentConfig
 } from "@aws-sdk/middleware-user-agent";
 import { retryPlugin, RetryConfig } from "@aws-sdk/retry-middleware";
 import {
-<<<<<<< HEAD
-  awsAuthPlugin,
-=======
   signingPlugin,
->>>>>>> feat: add client and config
   AwsAuthConfiguration
 } from "@aws-sdk/signing-middleware";
 import {
   TranscribeStreamingConfiguration,
-<<<<<<< HEAD
-  TranscribeStreamingResolvedConfiguration
-} from "./TranscribeStreamingConfiguration";
-import { TranscribeStreamingRuntimeConfiguration } from "./runtimeConfig";
-=======
   TranscribeStreamingResolvedConfiguration,
   TranscribeStreamingRuntimeConfiguration
 } from "./TranscribeStreamingConfiguration";
->>>>>>> feat: add client and config
 import {
   RegionConfiguration,
   EndpointsConfig,
@@ -61,13 +47,8 @@ export class TranscribeStreamingClient extends SmithyClient<
     if (this.config.maxRetries > 0) {
       super.use(retryPlugin(this.config));
     }
-<<<<<<< HEAD
-    super.use(awsAuthPlugin(this.config));
-    super.use(userAgentPlugin(this.config));
-=======
     super.use(signingPlugin(this.config));
     super.use(UserAgentPlugin(this.config));
->>>>>>> feat: add client and config
   }
 
   destroy(): void {
