@@ -1,6 +1,6 @@
 import { defaultProvider as credentialDefaultProvider } from "@aws-sdk/credential-provider-node";
 import { Hash } from "@aws-sdk/hash-node";
-import { NodeHttpHandler } from "@aws-sdk/node-http-handler";
+import { NodeHttp2Handler } from "@aws-sdk/node-http-handler";
 import { defaultProvider as regionDefaultProvider } from "@aws-sdk/region-provider";
 import { parseUrl } from "@aws-sdk/url-parser-node";
 import { calculateBodyLength } from "@aws-sdk/util-body-length-node";
@@ -18,7 +18,7 @@ export const TranscribeStreamingRuntimeConfiguration: Required<
   protocolDefaultProvider: handler => new RestJsonProtocol(handler),
   signingName: "transcribe-streaming",
   service: "transcribe-streaming",
-  httpHandler: new NodeHttpHandler(),
+  httpHandler: new NodeHttp2Handler(),
   sha256: Hash.bind(null, "sha256"),
   credentialDefaultProvider,
   regionDefaultProvider,
