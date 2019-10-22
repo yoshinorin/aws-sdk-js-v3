@@ -7,40 +7,106 @@ import {
   UserAgentConfigInput
 } from "@aws-sdk/middleware-user-agent";
 import { RetryConfig, RetryConfigInput } from "@aws-sdk/retry-middleware";
-import { name, version } from "./package.json";
 import {
   RegionConfiguration,
   RegionConfigurationInput,
   EndpointsConfig,
   EndpointsConfigInput,
   ProtocolConfig,
-  ProtocolConfigInput,
-  AWSClientRuntimeConfiguration
+  ProtocolConfigInput
 } from "@aws-sdk/config-resolver";
+import {
+  Credentials,
+  Provider,
+  HashConstructor,
+  UrlParser,
+  Protocol,
+  StreamCollector,
+  Decoder,
+  Encoder
+} from "@aws-sdk/types";
+import { HttpHandler, HttpRequest, HttpResponse } from "@aws-sdk/protocol-http";
 
-export type AWSClientRuntimeResolvedConfiguration = Required<
-  AWSClientRuntimeConfiguration
->;
+export interface TranscribeStreamingRuntimeDependencies {
+  /**
+   * The HTTP handler to use. Fetch in browser and Https in Nodejs
+   */
+  httpHandler?: HttpHandler;
 
-export const TranscribeStreamingRuntimeConfiguration: AWSClientRuntimeResolvedConfiguration = {
-  protocolDefaultProvider: handler => new JsonProtocol(handler),
-  signingName: "transcribe-streaming",
-  service: "transcribe-streaming",
-  httpHandler: new NodeHttpHandler(),
-  sha256: Hash.bind(null, "sha256"),
-  credentialDefaultProvider,
-  regionDefaultProvider,
-  urlParser: parseUrl,
-  bodyLengthChecker: calculateBodyLength,
-  streamCollector,
-  base64Decoder: fromBase64,
-  base64Encoder: toBase64,
-  utf8Decoder: fromUtf8,
-  utf8Encoder: toUtf8,
-  defaultUserAgent: defaultUserAgent(name, version)
-};
+  /**
+   * A constructor for a class implementing the @aws-sdk/types.Hash interface that computes the SHA-256 HMAC or checksum of a string or binary buffer
+   */
+  sha256?: HashConstructor;
 
-export type TranscribeStreamingConfiguration = AWSClientRuntimeConfiguration &
+  /**
+   * Default credentials provider; Not available in browser runtime
+   */
+  credentialDefaultProvider?: (input: any) => Provider<Credentials>;
+
+  /**
+   * Provider function that return promise of a region string
+   */
+  regionDefaultProvider?: (input: any) => Provider<string>;
+
+  /**
+   * The function that will be used to convert strings into HTTP endpoints
+   */
+  urlParser?: UrlParser;
+
+  /**
+   * A function that can calculate the length of a request body.
+   */
+  bodyLengthChecker?: (body: any) => number | undefined;
+
+  /**
+   * A function that converts a stream into an array of bytes.
+   */
+  streamCollector?: StreamCollector;
+
+  /**
+   * The function that will be used to convert a base64-encoded string to a byte array
+   */
+  base64Decoder?: Decoder;
+
+  /**
+   * The function that will be used to convert binary data to a base64-encoded string
+   */
+  base64Encoder?: Encoder;
+
+  /**
+   * The function that will be used to convert a UTF8-encoded string to a byte array
+   */
+  utf8Decoder?: Decoder;
+
+  /**
+   * The function that will be used to convert binary data to a UTF-8 encoded string
+   */
+  utf8Encoder?: Encoder;
+
+  /**
+   * The function that will be used to populate default value in 'User-Agent' header
+   */
+  defaultUserAgent?: string;
+
+  /**
+   * The function that will be used to populate serializing protocol
+   */
+  protocolDefaultProvider?: (
+    handler: HttpHandler
+  ) => Protocol<HttpRequest, HttpResponse>;
+
+  /**
+   * The service name with which to sign requests.
+   */
+  signingName?: string;
+
+  /**
+   * The service name with which to construct endpoints.
+   */
+  service?: string;
+}
+
+export type TranscribeStreamingConfiguration = TranscribeStreamingRuntimeDependencies &
   AwsAuthConfigurationInput &
   RegionConfigurationInput &
   RetryConfigInput &
@@ -48,7 +114,9 @@ export type TranscribeStreamingConfiguration = AWSClientRuntimeConfiguration &
   ProtocolConfigInput &
   UserAgentConfigInput;
 
-export type TranscribeStreamingResolvedConfiguration = AWSClientRuntimeResolvedConfiguration &
+export type TranscribeStreamingResolvedConfiguration = Required<
+  TranscribeStreamingRuntimeDependencies
+> &
   AwsAuthConfiguration.Resolved &
   RegionConfiguration.Resolved &
   RetryConfig.Resolved &

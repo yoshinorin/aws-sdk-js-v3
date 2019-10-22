@@ -1,6 +1,5 @@
 import { Command } from "@aws-sdk/smithy-client";
-import { serializerPlugin } from "@aws-sdk/middleware-serializer";
-import { deserializerPlugin } from "@aws-sdk/middleware-deserializer";
+import { serdePlugin } from "@aws-sdk/middleware-serde";
 import * as __aws_sdk_types from "@aws-sdk/types";
 import { TranscribeStreamingResolvedConfiguration } from "../TranscribeStreamingConfiguration";
 import { HttpRequest } from "@aws-sdk/protocol-http";
@@ -37,11 +36,9 @@ export class StartStreamTranscriptionCommand extends Command<
     const { httpHandler } = configuration;
 
     this.use(
-      serializerPlugin(configuration, startStreamTranscriptionSerializer)
-    );
-    this.use(
-      deserializerPlugin<StartStreamTranscriptionOutput>(
+      serdePlugin(
         configuration,
+        startStreamTranscriptionSerializer,
         startStreamTranscriptionDeserializer
       )
     );
