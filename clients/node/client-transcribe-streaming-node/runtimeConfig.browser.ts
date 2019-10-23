@@ -4,7 +4,7 @@ import { FetchHttpHandler } from "@aws-sdk/fetch-http-handler";
 import { parseUrl } from "@aws-sdk/url-parser-browser";
 import { calculateBodyLength } from "@aws-sdk/util-body-length-browser";
 import { streamCollector } from "@aws-sdk/stream-collector-browser";
-import { RestJsonProtocol } from "@aws-sdk/protocol-rest-json";
+import { JsonProtocol } from "@aws-sdk/protocol-json";
 import { fromUtf8, toUtf8 } from "@aws-sdk/util-utf8-browser";
 import { fromBase64, toBase64 } from "@aws-sdk/util-base64-browser";
 import { defaultUserAgent } from "@aws-sdk/util-user-agent-browser";
@@ -14,9 +14,9 @@ import { TranscribeStreamingRuntimeDependencies } from "./TranscribeStreamingCon
 export const TranscribeStreamingRuntimeConfiguration: Required<
   TranscribeStreamingRuntimeDependencies
 > = {
-  protocolDefaultProvider: handler => new RestJsonProtocol(handler),
-  signingName: "transcribe-streaming",
-  service: "transcribe-streaming",
+  protocolDefaultProvider: handler => new JsonProtocol(handler),
+  signingName: "transcribestreaming",
+  service: "transcribestreaming",
   httpHandler: new FetchHttpHandler(),
   sha256: Sha256,
   credentialDefaultProvider: invalidFunction("Credential is missing") as any,
