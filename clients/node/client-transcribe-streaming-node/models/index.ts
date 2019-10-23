@@ -1,4 +1,4 @@
-import * as _smithy from "../../lib/smithy";
+import * as _smithy from "../lib/smithy";
 import { MetadataBearer as $MetadataBearer } from "@aws-sdk/types";
 
 export interface Alternative {
@@ -97,13 +97,13 @@ export namespace Item {
 
 export enum ItemType {
   PRONUNCIATION = "PRONUNCIATION",
-  PUNCTUATION = "PUNCTUATION",
-};
+  PUNCTUATION = "PUNCTUATION"
+}
 
 export enum LanguageCode {
   EN_US = "ENUS",
-  EN_GB = "ENGB",
-};
+  EN_GB = "ENGB"
+}
 
 export interface LimitExceededException extends _smithy.SmithyException {
   __type: "com.amazon.transcribe.streaming#LimitExceededException";
@@ -121,8 +121,8 @@ export namespace LimitExceededException {
 }
 
 export enum MediaEncoding {
-  PCM = "PCM",
-};
+  PCM = "PCM"
+}
 
 export interface Result {
   __type?: "com.amazon.transcribe.streaming#Result";
@@ -151,7 +151,8 @@ export interface StartStreamTranscriptionRequest {
 }
 
 export namespace StartStreamTranscriptionRequest {
-  export const ID = "com.amazon.transcribe.streaming#StartStreamTranscriptionRequest";
+  export const ID =
+    "com.amazon.transcribe.streaming#StartStreamTranscriptionRequest";
   export function isa(o: any): o is StartStreamTranscriptionRequest {
     return _smithy.isa(o, ID);
   }
@@ -169,7 +170,8 @@ export interface StartStreamTranscriptionResponse extends $MetadataBearer {
 }
 
 export namespace StartStreamTranscriptionResponse {
-  export const ID = "com.amazon.transcribe.streaming#StartStreamTranscriptionResponse";
+  export const ID =
+    "com.amazon.transcribe.streaming#StartStreamTranscriptionResponse";
   export function isa(o: any): o is StartStreamTranscriptionResponse {
     return _smithy.isa(o, ID);
   }
