@@ -3,16 +3,11 @@ import {
   StartStreamTranscriptionResponse
 } from "../models";
 import { HttpRequest, HttpResponse } from "@aws-sdk/protocol-http";
-import {
-  SerializerUtils,
-  DeserializerUtils,
-  HeaderBag,
-  ResponseMetadata
-} from "@aws-sdk/types";
+import { SerdeContext, HeaderBag, ResponseMetadata } from "@aws-sdk/types";
 
 export function startStreamTranscriptionAwsJson1_1Serialize(
   input: StartStreamTranscriptionRequest,
-  utils: SerializerUtils
+  utils: SerdeContext
 ): HttpRequest {
   let body: any = {};
   let headers: HeaderBag = {
@@ -53,7 +48,7 @@ export function startStreamTranscriptionAwsJson1_1Serialize(
 
 export async function startStreamTranscriptionAwsJson1_1Deserialize(
   output: HttpResponse,
-  utils?: DeserializerUtils
+  utils?: SerdeContext
 ): Promise<StartStreamTranscriptionResponse> {
   if (output.statusCode !== 200) {
     return startStreamTranscriptionAwsJson1_1DeserializeError(output);
