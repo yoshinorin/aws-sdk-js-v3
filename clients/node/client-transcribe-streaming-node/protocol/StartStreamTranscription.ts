@@ -7,16 +7,16 @@ import {
   startStreamTranscriptionAwsJson1_1Serialize,
   startStreamTranscriptionAwsJson1_1Deserialize
 } from "./AwsJson1_1";
-import { SerializerUtils, DeserializerUtils } from "@aws-sdk/types";
+import { SerdeContext } from "@aws-sdk/types";
 
 export function startStreamTranscriptionSerializer(
   input: StartStreamTranscriptionRequest,
   protocol: string,
-  utils: SerializerUtils
+  context: SerdeContext
 ): HttpRequest {
   switch (protocol) {
     case "aws.json-1.1":
-      return startStreamTranscriptionAwsJson1_1Serialize(input, utils);
+      return startStreamTranscriptionAwsJson1_1Serialize(input, context);
     default:
       throw new Error("Unknown protocol, use aws.json-1.1");
   }
@@ -25,11 +25,11 @@ export function startStreamTranscriptionSerializer(
 export async function startStreamTranscriptionDeserializer(
   output: HttpResponse,
   protocol: string,
-  utils: DeserializerUtils
+  context: SerdeContext
 ): Promise<StartStreamTranscriptionResponse> {
   switch (protocol) {
     case "aws.json-1.1":
-      return startStreamTranscriptionAwsJson1_1Deserialize(output, utils);
+      return startStreamTranscriptionAwsJson1_1Deserialize(output, context);
     default:
       throw new Error("Unknown protocol, use aws.json-1.1");
   }

@@ -4,8 +4,7 @@ import {
   Protocol,
   TransferHandler,
   HttpOptions,
-  SerializerUtils,
-  DeserializerUtils
+  SerdeContext
 } from "@aws-sdk/types";
 import { HttpRequest, HttpResponse } from "@aws-sdk/protocol-http";
 
@@ -20,16 +19,16 @@ export class JsonProtocol extends Protocol<
     super(handler);
   }
   serialize(
-    serializer: RequestSerializer<HttpRequest, SerializerUtils>,
+    serializer: RequestSerializer<HttpRequest, SerdeContext>,
     input: any,
-    utils: SerializerUtils
+    utils: SerdeContext
   ) {
     return serializer(input, "aws.json-1.1", utils);
   }
   deserialize(
-    deserializer: ResponseDeserializer<HttpResponse, any, DeserializerUtils>,
+    deserializer: ResponseDeserializer<HttpResponse, any, SerdeContext>,
     output: HttpResponse,
-    utils: DeserializerUtils
+    utils: SerdeContext
   ) {
     return deserializer(output, "aws.json-1.1", utils) as any;
   }

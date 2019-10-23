@@ -1,39 +1,45 @@
 import { Command } from "@aws-sdk/smithy-client";
 import { serdePlugin } from "@aws-sdk/middleware-serde";
-import * as __aws_sdk_types from "@aws-sdk/types";
+import {
+  HttpOptions,
+  Handler,
+  HandlerExecutionContext,
+  FinalizeHandlerArguments,
+  MiddlewareStack
+} from "@aws-sdk/types";
 import { TranscribeStreamingResolvedConfiguration } from "../TranscribeStreamingConfiguration";
 import { HttpRequest } from "@aws-sdk/protocol-http";
 import {
   startStreamTranscriptionSerializer,
   startStreamTranscriptionDeserializer
 } from "../protocol/StartStreamTranscription";
-import { FinalizeHandlerArguments, MiddlewareStack } from "@aws-sdk/types";
+import {
+  StartStreamTranscriptionRequest,
+  StartStreamTranscriptionResponse
+} from "../models";
 
-/**
- * To remove this when move to Smithy model
- */
-type StartStreamTranscriptionInput = any;
-type StartStreamTranscriptionOutput = any;
 type InputTypesUnion = any;
 type OutputTypesUnion = any;
 
 export class StartStreamTranscriptionCommand extends Command<
-  StartStreamTranscriptionInput,
-  StartStreamTranscriptionOutput
+  StartStreamTranscriptionRequest,
+  StartStreamTranscriptionResponse
 > {
-  constructor(readonly input: StartStreamTranscriptionInput) {
+  constructor(readonly input: StartStreamTranscriptionRequest) {
     super();
   }
 
   resolveMiddleware(
     clientStack: MiddlewareStack<InputTypesUnion, OutputTypesUnion>,
     configuration: TranscribeStreamingResolvedConfiguration,
-    options?: __aws_sdk_types.HttpOptions
-  ): __aws_sdk_types.Handler<
-    StartStreamTranscriptionInput,
-    StartStreamTranscriptionOutput
+    options?: HttpOptions
+  ): Handler<
+    StartStreamTranscriptionRequest,
+    StartStreamTranscriptionResponse
   > {
-    const { httpHandler } = configuration;
+    const {
+      protocol: { handler }
+    } = configuration;
 
     this.use(
       serdePlugin(
@@ -45,13 +51,13 @@ export class StartStreamTranscriptionCommand extends Command<
 
     const stack = clientStack.concat(this.middlewareStack);
 
-    const handlerExecutionContext: __aws_sdk_types.HandlerExecutionContext = {
+    const handlerExecutionContext: HandlerExecutionContext = {
       logger: {} as any
     };
 
     return stack.resolve(
       (request: FinalizeHandlerArguments<any>) =>
-        httpHandler.handle(request.request as HttpRequest, options || {}),
+        handler.handle(request.request as HttpRequest, options || {}),
       handlerExecutionContext
     );
   }
