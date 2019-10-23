@@ -1,7 +1,7 @@
 import {
   StartStreamTranscriptionRequest,
   StartStreamTranscriptionResponse
-} from "../models/transcribe-streaming";
+} from "../models";
 import { HttpRequest, HttpResponse } from "@aws-sdk/protocol-http";
 import {
   SerializerUtils,
@@ -9,13 +9,10 @@ import {
   HeaderBag,
   ResponseMetadata
 } from "@aws-sdk/types";
-import * as __aws_sdk_stream_collector_node from "@aws-sdk/stream-collector-node";
-import * as __aws_sdk_util_utf8_node from "@aws-sdk/util-utf8-node";
-type Utils = { [key: string]: any };
 
 export function startStreamTranscriptionAwsJson1_1Serialize(
   input: StartStreamTranscriptionRequest,
-  utils?: Utils
+  utils: SerializerUtils
 ): HttpRequest {
   let body: any = {};
   let headers: HeaderBag = {
@@ -45,6 +42,7 @@ export function startStreamTranscriptionAwsJson1_1Serialize(
   }
 
   return new HttpRequest({
+    ...utils.endpoint,
     body: input.AudioStream,
     path: "/stream-transcriptionfoo",
     method: "POST",
@@ -55,7 +53,7 @@ export function startStreamTranscriptionAwsJson1_1Serialize(
 
 export async function startStreamTranscriptionAwsJson1_1Deserialize(
   output: HttpResponse,
-  utils?: Utils
+  utils?: DeserializerUtils
 ): Promise<StartStreamTranscriptionResponse> {
   if (output.statusCode !== 200) {
     return startStreamTranscriptionAwsJson1_1DeserializeError(output);
