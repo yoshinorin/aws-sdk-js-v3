@@ -4,12 +4,18 @@ import {
 } from "../models";
 import { HttpRequest, HttpResponse } from "@aws-sdk/protocol-http";
 import { SerdeContext, HeaderBag, ResponseMetadata } from "@aws-sdk/types";
+// TODO move to SerdeContext
+import { EventStreamMarshaller } from "@aws-sdk/eventstream-marshaller";
 
 export function startStreamTranscriptionAwsJson1_1Serialize(
   input: StartStreamTranscriptionRequest,
-  utils: SerdeContext
+  context: SerdeContext
 ): HttpRequest {
-  let body: any = {};
+  const eventBuilder = new EventStreamMarshaller(
+    context.utf8Encoder,
+    context.utf8Decoder
+  );
+
   let headers: HeaderBag = {
     "Content-Type": "application/json"
   };
@@ -37,9 +43,9 @@ export function startStreamTranscriptionAwsJson1_1Serialize(
   }
 
   return new HttpRequest({
-    ...utils.endpoint,
+    ...context.endpoint,
     body: input.AudioStream,
-    path: "/stream-transcriptionfoo",
+    path: "/stream-transcription",
     method: "POST",
     protocol: "https:",
     headers: headers
@@ -48,7 +54,7 @@ export function startStreamTranscriptionAwsJson1_1Serialize(
 
 export async function startStreamTranscriptionAwsJson1_1Deserialize(
   output: HttpResponse,
-  utils?: SerdeContext
+  context: SerdeContext
 ): Promise<StartStreamTranscriptionResponse> {
   if (output.statusCode !== 200) {
     return startStreamTranscriptionAwsJson1_1DeserializeError(output);
@@ -56,7 +62,9 @@ export async function startStreamTranscriptionAwsJson1_1Deserialize(
   return Promise.resolve({
     $metadata: deserializeMetadata(output),
     __type: "com.amazon.transcribe.streaming#StartStreamTranscriptionResponse",
-    TranscriptResultStream: output.body,
+    TranscriptResultStream: transcriptResultStreamAwsJson1_1Deserialize(
+      output.body
+    ),
     LanguageCode: output.headers["x-amzn-transcribe-language-code"],
     SessionId: output.headers["x-amzn-transcribe-session-id"],
     MediaSampleRateHertz: parseInt(
@@ -76,6 +84,10 @@ async function startStreamTranscriptionAwsJson1_1DeserializeError(
     $name: "UnknownException",
     $fault: "server"
   });
+}
+
+function transcriptResultStreamAwsJson1_1Deserialize(output: any) {
+  return output;
 }
 
 const deserializeMetadata = (output: HttpResponse): ResponseMetadata => ({
