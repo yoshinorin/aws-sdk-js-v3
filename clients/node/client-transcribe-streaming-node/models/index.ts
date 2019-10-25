@@ -102,7 +102,11 @@ export enum ItemType {
 
 export enum LanguageCode {
   EN_US = "ENUS",
-  EN_GB = "ENGB"
+  EN_GB = "ENGB",
+  EN_AU = "ENAU",
+  ES_US = "ESUS",
+  FR_CA = "FRCA",
+  FR_FR = "FRFR"
 }
 
 export interface LimitExceededException extends _smithy.SmithyException {
