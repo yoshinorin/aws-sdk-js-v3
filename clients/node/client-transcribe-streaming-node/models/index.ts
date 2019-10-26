@@ -26,7 +26,7 @@ export namespace AudioEvent {
   }
 }
 
-export interface AudioStream {
+export interface AudioStream extends AsyncGenerator {
   __type?: "com.amazon.transcribe.streaming#AudioStream";
   AudioEvent?: AudioEvent;
 }
