@@ -192,6 +192,7 @@ export namespace Transcript {
 
 export interface TranscriptEvent {
   __type?: "com.amazon.transcribe.streaming#TranscriptEvent";
+  type: "TranscriptEvent";
   Transcript?: Transcript;
 }
 
@@ -202,13 +203,13 @@ export namespace TranscriptEvent {
   }
 }
 
-export interface TranscriptResultStream {
+export interface TranscriptResultStream extends AsyncIterable<TranscriptEvent> {
   __type?: "com.amazon.transcribe.streaming#TranscriptResultStream";
-  InternalFailureException?: InternalFailureException;
-  TranscriptEvent?: TranscriptEvent;
-  ConflictException?: ConflictException;
-  LimitExceededException?: LimitExceededException;
-  BadRequestException?: BadRequestException;
+  // InternalFailureException?: InternalFailureException;
+  // TranscriptEvent?: TranscriptEvent;
+  // ConflictException?: ConflictException;
+  // LimitExceededException?: LimitExceededException;
+  // BadRequestException?: BadRequestException;
 }
 
 export namespace TranscriptResultStream {
