@@ -9,12 +9,14 @@ import { fromUtf8, toUtf8 } from "@aws-sdk/util-utf8-browser";
 import { fromBase64, toBase64 } from "@aws-sdk/util-base64-browser";
 import { defaultUserAgent } from "@aws-sdk/util-user-agent-browser";
 import { name, version } from "./package.json";
-import { RDSDataRuntimeDependencies } from "./RDSDataConfiguration";
+import { TranscribeStreamingRuntimeDependencies } from "./TranscribeStreamingClient";
 
-export const RDSRuntimeConfiguration: Required<RDSDataRuntimeDependencies> = {
+export const TranscribeStreamingRuntimeConfiguration: Required<
+  TranscribeStreamingRuntimeDependencies
+> = {
   protocolDefaultProvider: handler => new RestJsonProtocol(handler),
-  signingName: "rds-data",
-  service: "rds-data",
+  signingName: "transcribestreaming",
+  service: "transcribestreaming",
   httpHandler: new FetchHttpHandler(),
   sha256: Sha256,
   credentialDefaultProvider: invalidFunction("Credential is missing") as any,

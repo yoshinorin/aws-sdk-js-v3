@@ -1,6 +1,6 @@
 import { defaultProvider as credentialDefaultProvider } from "@aws-sdk/credential-provider-node";
 import { Hash } from "@aws-sdk/hash-node";
-import { NodeHttpHandler } from "@aws-sdk/node-http-handler";
+import { NodeHttp2Handler } from "@aws-sdk/node-http-handler";
 import { defaultProvider as regionDefaultProvider } from "@aws-sdk/region-provider";
 import { parseUrl } from "@aws-sdk/url-parser-node";
 import { calculateBodyLength } from "@aws-sdk/util-body-length-node";
@@ -10,13 +10,15 @@ import { fromUtf8, toUtf8 } from "@aws-sdk/util-utf8-node";
 import { fromBase64, toBase64 } from "@aws-sdk/util-base64-node";
 import { defaultUserAgent } from "@aws-sdk/util-user-agent-node";
 import { name, version } from "./package.json";
-import { RDSDataRuntimeDependencies } from "./RDSDataConfiguration";
+import { TranscribeStreamingRuntimeDependencies } from "./TranscribeStreamingClient";
 
-export const RDSRuntimeConfiguration: Required<RDSDataRuntimeDependencies> = {
+export const TranscribeStreamingRuntimeConfiguration: Required<
+  TranscribeStreamingRuntimeDependencies
+> = {
   protocolDefaultProvider: handler => new RestJsonProtocol(handler),
-  signingName: "rds-data",
-  service: "rds-data",
-  httpHandler: new NodeHttpHandler(),
+  signingName: "transcribestreaming",
+  service: "transcribestreaming",
+  httpHandler: new NodeHttp2Handler(),
   sha256: Hash.bind(null, "sha256"),
   credentialDefaultProvider,
   regionDefaultProvider,
