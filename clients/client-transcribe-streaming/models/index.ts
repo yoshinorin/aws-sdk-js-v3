@@ -16,6 +16,7 @@ export namespace Alternative {
 
 export interface AudioEvent {
   __type?: "com.amazon.transcribe.streaming#AudioEvent";
+  type: "AudioEvent";
   AudioChunk?: Uint8Array;
 }
 
@@ -28,7 +29,7 @@ export namespace AudioEvent {
 
 export interface AudioStream {
   __type?: "com.amazon.transcribe.streaming#AudioStream";
-  AudioEvent?: AudioEvent;
+  AudioEvent?: AsyncIterable<AudioEvent>;
 }
 
 export namespace AudioStream {
