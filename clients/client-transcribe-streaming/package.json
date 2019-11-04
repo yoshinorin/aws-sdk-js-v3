@@ -1,11 +1,11 @@
 {
-  "name": "@aws-sdk/client-transcribe-streaming-node",
-  "description": "Node SDK for AWS Transcribe Streaming",
+  "name": "@aws-sdk/client-transcribe-streaming",
+  "description": "JS SDK for AWS Transcribe Streaming",
   "version": "0.1.0-preview.3",
   "scripts": {
     "clean": "npm run remove-definitions && npm run remove-maps && npm run remove-js",
     "build-documentation": "npm run clean && typedoc ./",
-    "prepublishOnly": "tsc",
+    "prepublishOnly": "yarn build",
     "pretest": "tsc",
     "remove-definitions": "rimraf *.d.ts && rimraf ./commands/*.d.ts && rimraf ./model/*.d.ts rimraf ./types/*.d.ts && rimraf ./protocol/*.d.ts",
     "remove-documentation": "rimraf ./docs",

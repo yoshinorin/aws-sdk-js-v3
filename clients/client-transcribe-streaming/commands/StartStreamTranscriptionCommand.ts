@@ -1,5 +1,5 @@
 import { Command } from "@aws-sdk/smithy-client";
-import { serdePlugin } from "@aws-sdk/middleware-serde";
+import { getSerdePlugin } from "@aws-sdk/middleware-serde";
 import {
   HttpOptions,
   Handler,
@@ -8,7 +8,6 @@ import {
   MiddlewareStack,
   SerdeContext
 } from "@aws-sdk/types";
-import { TranscribeStreamingResolvedConfiguration } from "../TranscribeStreamingConfiguration";
 import { HttpRequest, HttpResponse } from "@aws-sdk/protocol-http";
 import {
   startStreamTranscriptionAwsJson1_1Serialize,
@@ -18,6 +17,7 @@ import {
   StartStreamTranscriptionRequest,
   StartStreamTranscriptionResponse
 } from "../models";
+import { TranscribeStreamingResolvedConfiguration } from "../TranscribeStreamingClient";
 
 type InputTypesUnion = any;
 type OutputTypesUnion = any;
@@ -42,7 +42,9 @@ export class StartStreamTranscriptionCommand extends Command<
       protocol: { handler }
     } = configuration;
 
-    this.use(serdePlugin(configuration, this.serialize, this.deserialize));
+    this.middlewareStack.use(
+      getSerdePlugin(configuration, this.serialize, this.deserialize)
+    );
 
     const stack = clientStack.concat(this.middlewareStack);
 
