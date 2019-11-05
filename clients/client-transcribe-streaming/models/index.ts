@@ -16,7 +16,6 @@ export namespace Alternative {
 
 export interface AudioEvent {
   __type?: "com.amazon.transcribe.streaming#AudioEvent";
-  type: "AudioEvent";
   AudioChunk?: Uint8Array;
 }
 
@@ -29,7 +28,7 @@ export namespace AudioEvent {
 
 export interface AudioStream {
   __type?: "com.amazon.transcribe.streaming#AudioStream";
-  AudioEvent?: AsyncIterable<AudioEvent>;
+  AudioEvent?: AudioEvent;
 }
 
 export namespace AudioStream {
@@ -98,13 +97,17 @@ export namespace Item {
 
 export enum ItemType {
   PRONUNCIATION = "PRONUNCIATION",
-  PUNCTUATION = "PUNCTUATION"
-}
+  PUNCTUATION = "PUNCTUATION",
+};
 
 export enum LanguageCode {
   EN_US = "ENUS",
-  EN_GB = "ENGB"
-}
+  EN_GB = "ENGB",
+  EN_AU = "ENAU",
+  ES_US = "ESUS",
+  FR_CA = "FRCA",
+  FR_FR = "FRFR",
+};
 
 export interface LimitExceededException extends _smithy.SmithyException {
   __type: "com.amazon.transcribe.streaming#LimitExceededException";
@@ -122,15 +125,15 @@ export namespace LimitExceededException {
 }
 
 export enum MediaEncoding {
-  PCM = "PCM"
-}
+  PCM = "PCM",
+};
 
 export interface Result {
   __type?: "com.amazon.transcribe.streaming#Result";
-  Alternatives?: Array<Alternative>;
   StartTime?: number;
   IsPartial?: boolean;
   EndTime?: number;
+  Alternatives?: Array<Alternative>;
   ResultId?: string;
 }
 
@@ -143,17 +146,16 @@ export namespace Result {
 
 export interface StartStreamTranscriptionRequest {
   __type?: "com.amazon.transcribe.streaming#StartStreamTranscriptionRequest";
-  MediaEncoding: MediaEncoding | string | undefined;
   VocabularyName?: string;
   AudioStream: AudioStream | undefined;
+  MediaSampleRateHertz: number | undefined;
+  MediaEncoding: MediaEncoding | string | undefined;
   SessionId?: string;
   LanguageCode: LanguageCode | string | undefined;
-  MediaSampleRateHertz: number | undefined;
 }
 
 export namespace StartStreamTranscriptionRequest {
-  export const ID =
-    "com.amazon.transcribe.streaming#StartStreamTranscriptionRequest";
+  export const ID = "com.amazon.transcribe.streaming#StartStreamTranscriptionRequest";
   export function isa(o: any): o is StartStreamTranscriptionRequest {
     return _smithy.isa(o, ID);
   }
@@ -162,17 +164,16 @@ export namespace StartStreamTranscriptionRequest {
 export interface StartStreamTranscriptionResponse extends $MetadataBearer {
   __type?: "com.amazon.transcribe.streaming#StartStreamTranscriptionResponse";
   TranscriptResultStream?: TranscriptResultStream;
+  MediaSampleRateHertz?: number;
+  VocabularyName?: string;
   LanguageCode?: LanguageCode | string;
   SessionId?: string;
-  MediaSampleRateHertz?: number;
   MediaEncoding?: MediaEncoding | string;
   RequestId?: string;
-  VocabularyName?: string;
 }
 
 export namespace StartStreamTranscriptionResponse {
-  export const ID =
-    "com.amazon.transcribe.streaming#StartStreamTranscriptionResponse";
+  export const ID = "com.amazon.transcribe.streaming#StartStreamTranscriptionResponse";
   export function isa(o: any): o is StartStreamTranscriptionResponse {
     return _smithy.isa(o, ID);
   }
@@ -192,7 +193,6 @@ export namespace Transcript {
 
 export interface TranscriptEvent {
   __type?: "com.amazon.transcribe.streaming#TranscriptEvent";
-  type: "TranscriptEvent";
   Transcript?: Transcript;
 }
 
@@ -203,18 +203,84 @@ export namespace TranscriptEvent {
   }
 }
 
-export interface TranscriptResultStream extends AsyncIterable<TranscriptEvent> {
-  __type?: "com.amazon.transcribe.streaming#TranscriptResultStream";
-  // InternalFailureException?: InternalFailureException;
-  // TranscriptEvent?: TranscriptEvent;
-  // ConflictException?: ConflictException;
-  // LimitExceededException?: LimitExceededException;
-  // BadRequestException?: BadRequestException;
-}
+export type TranscriptResultStream =
+  | TranscriptResultStream.BadRequestExceptionMember
+  | TranscriptResultStream.ConflictExceptionMember
+  | TranscriptResultStream.InternalFailureExceptionMember
+  | TranscriptResultStream.LimitExceededExceptionMember
+  | TranscriptResultStream.TranscriptEventMember
+  | TranscriptResultStream.$UnknownMember
 
 export namespace TranscriptResultStream {
-  export const ID = "com.amazon.transcribe.streaming#TranscriptResultStream";
-  export function isa(o: any): o is TranscriptResultStream {
-    return _smithy.isa(o, ID);
+  export const ID = "com.amazon.transcribe.streaming#TranscriptResultStream"
+  interface $Base {
+    __type?: "com.amazon.transcribe.streaming#TranscriptResultStream";
+  }
+  export interface InternalFailureExceptionMember extends $Base {
+    InternalFailureException: InternalFailureException;
+    TranscriptEvent?: never;
+    ConflictException?: never;
+    LimitExceededException?: never;
+    BadRequestException?: never;
+    $unknown?: never;
+  }
+  export interface TranscriptEventMember extends $Base {
+    InternalFailureException?: never;
+    TranscriptEvent: TranscriptEvent;
+    ConflictException?: never;
+    LimitExceededException?: never;
+    BadRequestException?: never;
+    $unknown?: never;
+  }
+  export interface ConflictExceptionMember extends $Base {
+    InternalFailureException?: never;
+    TranscriptEvent?: never;
+    ConflictException: ConflictException;
+    LimitExceededException?: never;
+    BadRequestException?: never;
+    $unknown?: never;
+  }
+  export interface LimitExceededExceptionMember extends $Base {
+    InternalFailureException?: never;
+    TranscriptEvent?: never;
+    ConflictException?: never;
+    LimitExceededException: LimitExceededException;
+    BadRequestException?: never;
+    $unknown?: never;
+  }
+  export interface BadRequestExceptionMember extends $Base {
+    InternalFailureException?: never;
+    TranscriptEvent?: never;
+    ConflictException?: never;
+    LimitExceededException?: never;
+    BadRequestException: BadRequestException;
+    $unknown?: never;
+  }
+  export interface $UnknownMember extends $Base {
+    InternalFailureException?: never;
+    TranscriptEvent?: never;
+    ConflictException?: never;
+    LimitExceededException?: never;
+    BadRequestException?: never;
+    $unknown: [string, any];
+  }
+  export interface Visitor<T> {
+    InternalFailureException: (value: InternalFailureException) => T;
+    TranscriptEvent: (value: TranscriptEvent) => T;
+    ConflictException: (value: ConflictException) => T;
+    LimitExceededException: (value: LimitExceededException) => T;
+    BadRequestException: (value: BadRequestException) => T;
+    _: (name: string, value: any) => T;
+  }
+  export function visit<T>(
+    value: TranscriptResultStream,
+    visitor: Visitor<T>
+  ): T {
+    if (value.InternalFailureException !== undefined) return visitor.InternalFailureException(value.InternalFailureException);
+    if (value.TranscriptEvent !== undefined) return visitor.TranscriptEvent(value.TranscriptEvent);
+    if (value.ConflictException !== undefined) return visitor.ConflictException(value.ConflictException);
+    if (value.LimitExceededException !== undefined) return visitor.LimitExceededException(value.LimitExceededException);
+    if (value.BadRequestException !== undefined) return visitor.BadRequestException(value.BadRequestException);
+    return visitor._(value.$unknown[0], value.$unknown[1]);
   }
 }
