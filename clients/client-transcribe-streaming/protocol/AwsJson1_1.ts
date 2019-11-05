@@ -2,7 +2,8 @@ import {
   StartStreamTranscriptionRequest,
   StartStreamTranscriptionResponse,
   AudioEvent,
-  TranscriptEvent
+  TranscriptEvent,
+  TranscriptResultStream
 } from "../models";
 import { HttpRequest, HttpResponse } from "@aws-sdk/protocol-http";
 import { SerdeContext, HeaderBag, ResponseMetadata } from "@aws-sdk/types";
@@ -56,8 +57,8 @@ export function startStreamTranscriptionAwsJson1_1Serialize(
   });
 }
 
-export async function TranscriptEventAwsJson1_1Deserialize(
-  output: Message
+export async function transcriptEventAwsJson1_1Deserialize(
+  output: any
 ): Promise<TranscriptEvent> {
   return Promise.resolve({
     __type: "com.amazon.transcribe.streaming#TranscriptEvent"
@@ -100,23 +101,30 @@ async function startStreamTranscriptionAwsJson1_1DeserializeError(
   });
 }
 
-function transcriptResultStreamAwsJson1_1Deserialize(
+const transcriptResultStreamAwsJson1_1Deserialize = (
   output: any,
   context: SerdeContext
-) {
-  const eventBuilder = new EventStreamMarshaller(
-    context.utf8Encoder,
-    context.utf8Decoder
-  );
-  //TODO: replace event deserializer back to visitor when it's ready
-  return eventBuilder.deserialize<TranscriptEvent>(output, {
-    TranscriptEvent: TranscriptEventAwsJson1_1Deserialize
-    // BadRequestException: BadRequestExceptionAwsJson1_1Deserialize,
-    // LimitExceededException: LimitExceededExceptionAwsJson1_1Deserialize,
-    // InternalFailureException: InternalFailureExceptionAwsJson1_1Deserialize,
-    // ConflictException: ConflictExceptionAwsJson1_1Deserialize
+): any =>
+  TranscriptResultStream.visit(output, {
+    InternalFailureException: value => {
+      value;
+    },
+    TranscriptEvent: value => {
+      return transcriptEventAwsJson1_1Deserialize(value);
+    },
+    ConflictException: value => {
+      return value;
+    },
+    LimitExceededException: value => {
+      return value;
+    },
+    BadRequestException: value => {
+      return value;
+    },
+    _: value => {
+      return value;
+    }
   });
-}
 
 const deserializeMetadata = (output: HttpResponse): ResponseMetadata => ({
   httpStatusCode: output.statusCode,
