@@ -60,7 +60,7 @@ export async function TranscriptEventAwsJson1_1Deserialize(
   output: Message
 ): Promise<TranscriptEvent> {
   return Promise.resolve({
-    type: "TranscriptEvent"
+    __type: "com.amazon.transcribe.streaming#TranscriptEvent"
     //fake deserializing
   });
 }
