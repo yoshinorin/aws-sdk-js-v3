@@ -1,11 +1,15 @@
 import {
   StartStreamTranscriptionRequest,
-  StartStreamTranscriptionResponse
+  StartStreamTranscriptionResponse,
+  AudioEvent,
+  TranscriptEvent
 } from "../models";
 import { HttpRequest, HttpResponse } from "@aws-sdk/protocol-http";
 import { SerdeContext, HeaderBag, ResponseMetadata } from "@aws-sdk/types";
 // TODO move to SerdeContext
-import { EventStreamMarshaller } from "@aws-sdk/eventstream-marshaller";
+import { EventStreamMarshaller } from "@aws-sdk/util-eventstream-node";
+//TODO move to @aws-sdk/types
+import { Message } from "@aws-sdk/eventstream-marshaller";
 
 export function startStreamTranscriptionAwsJson1_1Serialize(
   input: StartStreamTranscriptionRequest,
@@ -52,6 +56,15 @@ export function startStreamTranscriptionAwsJson1_1Serialize(
   });
 }
 
+export async function TranscriptEventAwsJson1_1Deserialize(
+  output: Message
+): Promise<TranscriptEvent> {
+  return Promise.resolve({
+    type: "TranscriptEvent"
+    //fake deserializing
+  });
+}
+
 export async function startStreamTranscriptionAwsJson1_1Deserialize(
   output: HttpResponse,
   context: SerdeContext
@@ -63,7 +76,8 @@ export async function startStreamTranscriptionAwsJson1_1Deserialize(
     $metadata: deserializeMetadata(output),
     __type: "com.amazon.transcribe.streaming#StartStreamTranscriptionResponse",
     TranscriptResultStream: transcriptResultStreamAwsJson1_1Deserialize(
-      output.body
+      output.body,
+      context
     ),
     LanguageCode: output.headers["x-amzn-transcribe-language-code"],
     SessionId: output.headers["x-amzn-transcribe-session-id"],
@@ -86,8 +100,22 @@ async function startStreamTranscriptionAwsJson1_1DeserializeError(
   });
 }
 
-function transcriptResultStreamAwsJson1_1Deserialize(output: any) {
-  return output;
+function transcriptResultStreamAwsJson1_1Deserialize(
+  output: any,
+  context: SerdeContext
+) {
+  const eventBuilder = new EventStreamMarshaller(
+    context.utf8Encoder,
+    context.utf8Decoder
+  );
+  //TODO: replace event deserializer back to visitor when it's ready
+  return eventBuilder.deserialize<TranscriptEvent>(output, {
+    TranscriptEvent: TranscriptEventAwsJson1_1Deserialize
+    // BadRequestException: BadRequestExceptionAwsJson1_1Deserialize,
+    // LimitExceededException: LimitExceededExceptionAwsJson1_1Deserialize,
+    // InternalFailureException: InternalFailureExceptionAwsJson1_1Deserialize,
+    // ConflictException: ConflictExceptionAwsJson1_1Deserialize
+  });
 }
 
 const deserializeMetadata = (output: HttpResponse): ResponseMetadata => ({

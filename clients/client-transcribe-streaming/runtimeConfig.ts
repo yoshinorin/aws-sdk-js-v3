@@ -9,6 +9,7 @@ import { RestJsonProtocol } from "@aws-sdk/protocol-rest-json";
 import { fromUtf8, toUtf8 } from "@aws-sdk/util-utf8-node";
 import { fromBase64, toBase64 } from "@aws-sdk/util-base64-node";
 import { defaultUserAgent } from "@aws-sdk/util-user-agent-node";
+import { EventStreamMarshaller } from "@aws-sdk/util-eventstream-node";
 import { name, version } from "./package.json";
 import { TranscribeStreamingRuntimeDependencies } from "./TranscribeStreamingClient";
 
@@ -30,4 +31,5 @@ export const TranscribeStreamingRuntimeConfiguration: Required<
   utf8Decoder: fromUtf8,
   utf8Encoder: toUtf8,
   defaultUserAgent: defaultUserAgent(name, version)
+  // eventStreamSerde: new EventStreamMarshaller(toUtf8, fromUtf8)
 };
