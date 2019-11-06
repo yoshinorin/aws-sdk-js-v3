@@ -26,15 +26,33 @@ export namespace AudioEvent {
   }
 }
 
-export interface AudioStream {
-  __type?: "com.amazon.transcribe.streaming#AudioStream";
-  AudioEvent?: AudioEvent;
-}
+export type AudioStream =
+  | AudioStream.AudioEventMember
+  | AudioStream.$UnknownMember
 
 export namespace AudioStream {
-  export const ID = "com.amazon.transcribe.streaming#AudioStream";
-  export function isa(o: any): o is AudioStream {
-    return _smithy.isa(o, ID);
+  export const ID = "com.amazon.transcribe.streaming#AudioStream"
+  interface $Base {
+    __type?: "com.amazon.transcribe.streaming#AudioStream";
+  }
+  export interface AudioEventMember extends $Base {
+    AudioEvent: AudioEvent;
+    $unknown?: never;
+  }
+  export interface $UnknownMember extends $Base {
+    AudioEvent?: never;
+    $unknown: [string, any];
+  }
+  export interface Visitor<T> {
+    AudioEvent: (value: AudioEvent) => T;
+    _: (name: string, value: any) => T;
+  }
+  export function visit<T>(
+    value: AudioStream,
+    visitor: Visitor<T>
+  ): T {
+    if (value.AudioEvent !== undefined) return visitor.AudioEvent(value.AudioEvent);
+    return visitor._(value.$unknown[0], value.$unknown[1]);
   }
 }
 
@@ -147,7 +165,7 @@ export namespace Result {
 export interface StartStreamTranscriptionRequest {
   __type?: "com.amazon.transcribe.streaming#StartStreamTranscriptionRequest";
   VocabularyName?: string;
-  AudioStream: AudioStream | undefined;
+  AudioStream?: AudioStream;
   MediaSampleRateHertz: number | undefined;
   MediaEncoding: MediaEncoding | string | undefined;
   SessionId?: string;
