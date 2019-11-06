@@ -2,6 +2,7 @@ import {
   StartStreamTranscriptionRequest,
   StartStreamTranscriptionResponse,
   AudioEvent,
+  AudioStream,
   TranscriptEvent,
   TranscriptResultStream
 } from "../models";
@@ -16,10 +17,7 @@ export function startStreamTranscriptionAwsJson1_1Serialize(
   input: StartStreamTranscriptionRequest,
   context: SerdeContext
 ): HttpRequest {
-  const eventBuilder = new EventStreamMarshaller(
-    context.utf8Encoder,
-    context.utf8Decoder
-  );
+  let body: any = {};
 
   let headers: HeaderBag = {
     "Content-Type": "application/json"
@@ -45,6 +43,10 @@ export function startStreamTranscriptionAwsJson1_1Serialize(
     headers[
       "x-amzn-transcribe-sample-rate"
     ] = input.MediaSampleRateHertz.toString();
+  }
+
+  if (input.AudioStream !== undefined) {
+    body = audioStreamAwsJson1_1Serialize(input.AudioStream, context);
   }
 
   return new HttpRequest({
@@ -99,6 +101,27 @@ async function startStreamTranscriptionAwsJson1_1DeserializeError(
     $name: "UnknownException",
     $fault: "server"
   });
+}
+
+async function audioStreamAwsJson1_1Serialize(
+  input: AudioStream,
+  context: SerdeContext
+): Promise<any> {
+  const marshaller = new EventStreamMarshaller(
+    context.utf8Encoder,
+    context.utf8Decoder
+  );
+  return marshaller.serialize(
+    input,
+    AudioStream.visit(input, {
+      AudioEvent: value => {
+        value;
+      },
+      _: value => {
+        return value;
+      }
+    })
+  );
 }
 
 const transcriptResultStreamAwsJson1_1Deserialize = (

@@ -18,7 +18,7 @@ export class EventStreamMarshaller {
     //return an async generator
     return gen;
   }
-  serializer(input: AsyncIterable<any>, serializer: any) {
+  serialize(input: AsyncIterable<any>, serializer: any) {
     //return Readable
   }
 }
