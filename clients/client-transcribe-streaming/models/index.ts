@@ -28,10 +28,10 @@ export namespace AudioEvent {
 
 export type AudioStream =
   | AudioStream.AudioEventMember
-  | AudioStream.$UnknownMember
+  | AudioStream.$UnknownMember;
 
 export namespace AudioStream {
-  export const ID = "com.amazonaws.transcribe.streaming#AudioStream"
+  export const ID = "com.amazonaws.transcribe.streaming#AudioStream";
   interface $Base {
     __type?: "com.amazonaws.transcribe.streaming#AudioStream";
   }
@@ -47,11 +47,9 @@ export namespace AudioStream {
     AudioEvent: (value: AudioEvent) => T;
     _: (name: string, value: any) => T;
   }
-  export function visit<T>(
-    value: AudioStream,
-    visitor: Visitor<T>
-  ): T {
-    if (value.AudioEvent !== undefined) return visitor.AudioEvent(value.AudioEvent);
+  export function visit<T>(value: AudioStream, visitor: Visitor<T>): T {
+    if (value.AudioEvent !== undefined)
+      return visitor.AudioEvent(value.AudioEvent);
     return visitor._(value.$unknown[0], value.$unknown[1]);
   }
 }
@@ -92,7 +90,8 @@ export interface InternalFailureException extends _smithy.SmithyException {
 }
 
 export namespace InternalFailureException {
-  export const ID = "com.amazonaws.transcribe.streaming#InternalFailureException";
+  export const ID =
+    "com.amazonaws.transcribe.streaming#InternalFailureException";
   export function isa(o: any): o is InternalFailureException {
     return _smithy.isa(o, ID);
   }
@@ -115,8 +114,8 @@ export namespace Item {
 
 export enum ItemType {
   PRONUNCIATION = "pronunciation",
-  PUNCTUATION = "punctuation",
-};
+  PUNCTUATION = "punctuation"
+}
 
 export enum LanguageCode {
   EN_US = "en-US",
@@ -124,8 +123,8 @@ export enum LanguageCode {
   ES_US = "es-US",
   FR_CA = "fr-CA",
   FR_FR = "fr-FR",
-  EN_AU = "en-AU",
-};
+  EN_AU = "en-AU"
+}
 
 export interface LimitExceededException extends _smithy.SmithyException {
   __type: "com.amazonaws.transcribe.streaming#LimitExceededException";
@@ -164,11 +163,12 @@ export interface StartStreamTranscriptionRequest {
   MediaSampleRateHertz: number | undefined;
   VocabularyName?: string;
   LanguageCode: LanguageCode | string | undefined;
-  AudioStream?: AudioStream;
+  AudioStream?: AsyncIterable<AudioStream>;
 }
 
 export namespace StartStreamTranscriptionRequest {
-  export const ID = "com.amazonaws.transcribe.streaming#StartStreamTranscriptionRequest";
+  export const ID =
+    "com.amazonaws.transcribe.streaming#StartStreamTranscriptionRequest";
   export function isa(o: any): o is StartStreamTranscriptionRequest {
     return _smithy.isa(o, ID);
   }
@@ -186,7 +186,8 @@ export interface StartStreamTranscriptionResponse extends $MetadataBearer {
 }
 
 export namespace StartStreamTranscriptionResponse {
-  export const ID = "com.amazonaws.transcribe.streaming#StartStreamTranscriptionResponse";
+  export const ID =
+    "com.amazonaws.transcribe.streaming#StartStreamTranscriptionResponse";
   export function isa(o: any): o is StartStreamTranscriptionResponse {
     return _smithy.isa(o, ID);
   }
@@ -222,10 +223,10 @@ export type TranscriptResultStream =
   | TranscriptResultStream.InternalFailureExceptionMember
   | TranscriptResultStream.LimitExceededExceptionMember
   | TranscriptResultStream.TranscriptEventMember
-  | TranscriptResultStream.$UnknownMember
+  | TranscriptResultStream.$UnknownMember;
 
 export namespace TranscriptResultStream {
-  export const ID = "com.amazonaws.transcribe.streaming#TranscriptResultStream"
+  export const ID = "com.amazonaws.transcribe.streaming#TranscriptResultStream";
   interface $Base {
     __type?: "com.amazonaws.transcribe.streaming#TranscriptResultStream";
   }
@@ -289,15 +290,20 @@ export namespace TranscriptResultStream {
     value: TranscriptResultStream,
     visitor: Visitor<T>
   ): T {
-    if (value.LimitExceededException !== undefined) return visitor.LimitExceededException(value.LimitExceededException);
-    if (value.ConflictException !== undefined) return visitor.ConflictException(value.ConflictException);
-    if (value.BadRequestException !== undefined) return visitor.BadRequestException(value.BadRequestException);
-    if (value.InternalFailureException !== undefined) return visitor.InternalFailureException(value.InternalFailureException);
-    if (value.TranscriptEvent !== undefined) return visitor.TranscriptEvent(value.TranscriptEvent);
+    if (value.LimitExceededException !== undefined)
+      return visitor.LimitExceededException(value.LimitExceededException);
+    if (value.ConflictException !== undefined)
+      return visitor.ConflictException(value.ConflictException);
+    if (value.BadRequestException !== undefined)
+      return visitor.BadRequestException(value.BadRequestException);
+    if (value.InternalFailureException !== undefined)
+      return visitor.InternalFailureException(value.InternalFailureException);
+    if (value.TranscriptEvent !== undefined)
+      return visitor.TranscriptEvent(value.TranscriptEvent);
     return visitor._(value.$unknown[0], value.$unknown[1]);
   }
 }
 
 export enum MediaEncoding {
-  PCM = "pcm",
-};
+  PCM = "pcm"
+}
