@@ -83,8 +83,6 @@
       "protocol_tests/*"
     ],
     "nohoist": [
-      "**/karma*",
-      "**/karma*/**",
       "**/@types/mocha*",
       "**/@types/mocha*/**"
     ]
