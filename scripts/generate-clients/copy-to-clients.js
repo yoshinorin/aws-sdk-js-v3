@@ -41,7 +41,7 @@ const getOverwritablePredicate = (packageName) => (pathName) => {
 const mergeManifest = (fromContent = {}, toContent = {}) => {
   const merged = {};
   for (const name of Object.keys(fromContent)) {
-    if (fromContent[name].constructor.name === "Object") {
+    if (typeof fromContent[name] === "object") {
       merged[name] = mergeManifest(fromContent[name], toContent[name]);
       if (name === "scripts" || name === "devDependencies") {
         // Allow target package.json(toContent) has its own special script or
